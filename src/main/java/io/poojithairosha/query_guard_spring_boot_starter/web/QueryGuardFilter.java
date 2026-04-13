@@ -1,13 +1,21 @@
 package io.poojithairosha.query_guard_spring_boot_starter.web;
 
+import io.poojithairosha.query_guard_spring_boot_starter.analysis.*;
 import io.poojithairosha.query_guard_spring_boot_starter.context.QueryContext;
 import io.poojithairosha.query_guard_spring_boot_starter.context.QueryContextHolder;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.List;
 
+@Slf4j
+@RequiredArgsConstructor
 public class QueryGuardFilter implements Filter {
+
+    private final QueryAnalysisEngine queryAnalysisEngine;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -27,10 +35,16 @@ public class QueryGuardFilter implements Filter {
     }
 
     private void logSummary(HttpServletRequest request, QueryContext context) {
-        System.out.println("==== QueryGuard Summary ====");
-        System.out.println("Endpoint: " + request.getRequestURI());
-        System.out.println("Query Count: " + context.getQueryCount());
-        System.out.println("Total Query Time: " + context.getTotalExecutionTime() + " ms");
-        System.out.println("============================");
+        log.info("==== QueryGuard Summary ====");
+
+        log.info("Endpoint: " + request.getRequestURI());
+        log.info("Query Count: " + context.getQueryCount());
+        log.info("Total Query Time: " + context.getTotalExecutionTime() + " ms");
+
+        queryAnalysisEngine.analyze(context).forEach(result -> {
+            log.warn("⚠\uFE0F [{}] {}", result.getType(), result.getMessage());
+        });
+
+        log.info("============================");
     }
 }
