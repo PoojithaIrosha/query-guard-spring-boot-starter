@@ -1,21 +1,25 @@
 package io.poojithairosha.query_guard_spring_boot_starter.analysis;
 
 import io.poojithairosha.query_guard_spring_boot_starter.context.QueryContext;
-import io.poojithairosha.query_guard_spring_boot_starter.model.QueryExecution;
+import io.poojithairosha.query_guard_spring_boot_starter.util.SqlUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class DuplicateQueryAnalyzer implements QueryAnalyzer {
 
     private static final int DUPLICATE_THRESHOLD = 1;
+    private static final String ANALYZER_TYPE = "DUPLICATE_QUERY";
 
     @Override
     public List<AnalysisResult> analyze(QueryContext context) {
         log.debug("[DuplicateQueryAnalyzer] start analyzing");
+
         if (context == null || context.getQueries().isEmpty()) {
             log.debug("[DuplicateQueryAnalyzer] nothing to analyze. skipping");
             return Collections.emptyList();
@@ -24,7 +28,7 @@ public class DuplicateQueryAnalyzer implements QueryAnalyzer {
         Map<String, Long> queryCountMap = context.getQueries()
                 .stream()
                 .collect(Collectors.groupingBy(
-                        this::normalize,
+                        SqlUtil::normalizeSQL,
                         Collectors.counting()
                 ));
 
@@ -34,10 +38,16 @@ public class DuplicateQueryAnalyzer implements QueryAnalyzer {
 
         queryCountMap.forEach((query, count) -> {
             if (count > DUPLICATE_THRESHOLD) {
-                results.add(AnalysisResult.of(
-                        "DUPLICATE_QUERY",
-                        buildMessage(query, count)
-                ));
+                results.add(
+                        AnalysisResult.builder()
+                                .type(ANALYZER_TYPE)
+                                .severity(resolveSeverity(count))
+                                .message("duplicate query detected")
+                                .pattern(query)
+                                .suggestions(buildSuggestions())
+                                .occurrenceCount(count.intValue())
+                                .build()
+                );
             }
         });
 
@@ -46,13 +56,18 @@ public class DuplicateQueryAnalyzer implements QueryAnalyzer {
         return results;
     }
 
-    private String normalize(QueryExecution execution) {
-        return execution.getSql()
-                .replaceAll("\\s+", " ")
-                .trim();
+    private Severity resolveSeverity(long count) {
+        if (count >= 5) return Severity.CRITICAL;
+        if (count >= 3) return Severity.WARNING;
+        return Severity.INFO;
     }
 
-    private String buildMessage(String query, Long count) {
-        return String.format("Query executed %d times: %s", count, query);
+    private List<String> buildSuggestions() {
+        return List.of(
+                "Possible N+1 issue detected",
+                "Use JOIN FETCH to reduce multiple queries",
+                "Use @EntityGraph in repository",
+                "Consider batch fetching"
+        );
     }
 }

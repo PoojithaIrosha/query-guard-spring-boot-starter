@@ -5,6 +5,7 @@ import io.poojithairosha.query_guard_spring_boot_starter.analysis.NPlusOneAnalyz
 import io.poojithairosha.query_guard_spring_boot_starter.analysis.QueryAnalysisEngine;
 import io.poojithairosha.query_guard_spring_boot_starter.analysis.QueryAnalyzer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,12 +21,22 @@ public class QueryGuardAnalysisConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnProperty(
+            name = "queryguard.analyzers.duplicate",
+            havingValue = "true",
+            matchIfMissing = true
+    )
     public DuplicateQueryAnalyzer duplicateQueryAnalyzer() {
         return new DuplicateQueryAnalyzer();
     }
 
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnProperty(
+            name = "queryguard.analyzers.n-plus-one",
+            havingValue = "true",
+            matchIfMissing = true
+    )
     public NPlusOneAnalyzer nPlusOneAnalyzer() {
         return new NPlusOneAnalyzer();
     }
