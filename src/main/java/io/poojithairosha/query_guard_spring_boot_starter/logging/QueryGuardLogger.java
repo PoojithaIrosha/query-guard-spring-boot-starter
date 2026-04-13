@@ -12,15 +12,7 @@ public class QueryGuardLogger {
     public void log(QueryGuardReport report) {
         try {
             String json = objectMapper.writeValueAsString(report);
-            log.info(
-                    "type=QUERY_GUARD endpoint={} method={} traceId={} nPlusOne={} queryCount={} {}",
-                    report.getEndpoint(),
-                    report.getMethod(),
-                    report.getTraceId(),
-                    report.isNPlusOneDetected(),
-                    report.getQueryCount(),
-                    json
-            );
+            log.info(json);
         } catch (Exception e) {
             log.error("Failed to serialize QueryGuardReport", e);
         }
