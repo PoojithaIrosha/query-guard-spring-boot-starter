@@ -2,6 +2,8 @@ package io.poojithairosha.query_guard_spring_boot_starter.context;
 
 public class QueryContextHolder {
 
+    private QueryContextHolder() {}
+
     private static final ThreadLocal<QueryContext> CONTEXT = new ThreadLocal<>();
 
     public static void init() {

@@ -4,6 +4,8 @@ import io.poojithairosha.query_guard_spring_boot_starter.model.QueryExecution;
 
 public class SqlUtil {
 
+    private SqlUtil() {}
+
     public static String normalizeSQL(String sql) {
         return sql == null ? null :
                 sql.toLowerCase()

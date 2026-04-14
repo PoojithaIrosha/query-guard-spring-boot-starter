@@ -29,17 +29,17 @@ public class QueryGuardPreparedStatement implements PreparedStatement {
 
     @Override
     public ResultSet executeQuery() throws SQLException {
-        return executeWithTracking(() -> delegate.executeQuery());
+        return executeWithTracking(delegate::executeQuery);
     }
 
     @Override
     public int executeUpdate() throws SQLException {
-        return executeWithTracking(() -> delegate.executeUpdate());
+        return executeWithTracking(delegate::executeUpdate);
     }
 
     @Override
     public boolean execute() throws SQLException {
-        return executeWithTracking(() -> delegate.execute());
+        return executeWithTracking(delegate::execute);
     }
 
     private <T> T executeWithTracking(SqlSupplier<T> action) throws SQLException {

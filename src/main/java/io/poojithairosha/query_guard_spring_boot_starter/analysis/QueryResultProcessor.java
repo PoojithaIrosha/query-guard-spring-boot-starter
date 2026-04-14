@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 public class QueryResultProcessor {
 
+    private QueryResultProcessor() {}
+
     public static List<AnalysisResult> process(List<AnalysisResult> results) {
 
         Map<String, List<AnalysisResult>> grouped = results.stream()

@@ -5,6 +5,9 @@ import org.slf4j.MDC;
 import java.util.UUID;
 
 public class TraceContext {
+
+    private TraceContext() {}
+
     private static final String TRACE_ID = "traceId";
 
     public static String getOrCreateTraceId() {

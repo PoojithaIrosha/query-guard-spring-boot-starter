@@ -49,7 +49,7 @@ public class NPlusOneAnalyzer implements QueryAnalyzer {
                                 .message("N+1 query detected")
                                 .rootQuery(rootQuery.getSql())
                                 .pattern(pattern)
-                                .suggestions(buildSuggestions(pattern))
+                                .suggestions(buildSuggestions())
                                 .occurrenceCount(count)
                                 .build());
             }
@@ -60,7 +60,7 @@ public class NPlusOneAnalyzer implements QueryAnalyzer {
         return results;
     }
 
-    private List<String> buildSuggestions(String pattern) {
+    private List<String> buildSuggestions() {
         return List.of(
                 "Use JOIN FETCH to fetch related entities in one query",
                 "Use @EntityGraph on repository methods",

@@ -11,11 +11,13 @@ import io.poojithairosha.query_guard_spring_boot_starter.report.QueryGuardReport
 import io.poojithairosha.query_guard_spring_boot_starter.report.QueryGuardReportBuilder;
 import io.poojithairosha.query_guard_spring_boot_starter.trace.TraceContext;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.MDC;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,8 +27,7 @@ public class QueryGuardExecutor {
     private final QueryGuardLogger logger;
     private final QueryGuardProperties properties;
 
-
-    public void execute(HttpServletRequest request, ServletResponse servletResponse, FilterChain chain) throws Exception {
+    public void execute(HttpServletRequest request, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
         boolean traceCreated = false;
         String traceId = MDC.get("traceId");
 

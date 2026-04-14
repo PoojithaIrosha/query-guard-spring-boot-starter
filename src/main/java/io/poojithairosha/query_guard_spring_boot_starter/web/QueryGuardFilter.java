@@ -15,7 +15,8 @@ public class QueryGuardFilter implements Filter {
     private final QueryGuardExecutor executor;
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
         try {
             executor.execute((HttpServletRequest) servletRequest, servletResponse, filterChain);
         } catch (Exception e) {
