@@ -7,6 +7,7 @@ import io.poojithairosha.query_guard_spring_boot_starter.logging.QueryGuardLogge
 import io.poojithairosha.query_guard_spring_boot_starter.proxy.QueryGuardDataSource;
 import io.poojithairosha.query_guard_spring_boot_starter.report.QueryGuardReportBuilder;
 import io.poojithairosha.query_guard_spring_boot_starter.service.QueryGuardExecutor;
+import io.poojithairosha.query_guard_spring_boot_starter.storage.TraceStorage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -55,9 +56,10 @@ public class QueryGuardConfiguration {
             QueryAnalysisEngine analysisEngine,
             QueryGuardReportBuilder reportBuilder,
             QueryGuardLogger logger,
-            QueryGuardProperties properties
+            QueryGuardProperties properties,
+            TraceStorage traceStorage
     ) {
-        return new QueryGuardExecutor(analysisEngine, reportBuilder, logger, properties);
+        return new QueryGuardExecutor(analysisEngine, reportBuilder, logger, properties, traceStorage);
     }
 
 }

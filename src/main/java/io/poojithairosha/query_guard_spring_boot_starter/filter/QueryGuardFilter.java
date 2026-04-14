@@ -1,4 +1,4 @@
-package io.poojithairosha.query_guard_spring_boot_starter.web;
+package io.poojithairosha.query_guard_spring_boot_starter.filter;
 
 import io.poojithairosha.query_guard_spring_boot_starter.service.QueryGuardExecutor;
 import jakarta.servlet.*;

@@ -26,6 +26,7 @@ public class QueryGuardLogger {
                     .mapToInt(QueryGuardIssue::getOccurrenceCount)
                     .sum();
 
+            log.info("from queryguardlogger event emitted!");
             applicationEventPublisher.publishEvent(
                     new QueryGuardEvent(
                             report.getEndpoint(),

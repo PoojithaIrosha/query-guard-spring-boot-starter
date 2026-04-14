@@ -12,7 +12,8 @@ import org.springframework.context.annotation.Import;
         QueryGuardConfiguration.class,
         QueryGuardWebConfiguration.class,
         QueryGuardAnalysisConfiguration.class,
-        QueryGuardLoggingConfiguration.class
+        QueryGuardLoggingConfiguration.class,
+        QueryGuardMetricsConfiguration.class
 })
 public class QueryGuardAutoConfiguration {
 }

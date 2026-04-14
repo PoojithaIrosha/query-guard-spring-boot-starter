@@ -45,12 +45,13 @@ public class QueryGuardPreparedStatement implements PreparedStatement {
     private <T> T executeWithTracking(SqlSupplier<T> action) throws SQLException {
         listeners.forEach(l -> l.beforeQuery(sql));
 
-        long start = System.currentTimeMillis();
+        long startNs = System.nanoTime();
         try {
             return action.get();
         } finally {
-            long time = System.currentTimeMillis() - start;
-            QueryExecution execution = new QueryExecution(sql, time);
+            long endNs = System.nanoTime();
+            double timeMs = (endNs - startNs) / 1_000_000.0;
+            QueryExecution execution = new QueryExecution(sql, timeMs, startNs, endNs);
             listeners.forEach(l -> l.afterQuery(execution));
         }
     }

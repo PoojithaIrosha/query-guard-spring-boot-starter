@@ -7,8 +7,11 @@ import io.poojithairosha.query_guard_spring_boot_starter.config.QueryGuardProper
 import io.poojithairosha.query_guard_spring_boot_starter.context.QueryContext;
 import io.poojithairosha.query_guard_spring_boot_starter.context.QueryContextHolder;
 import io.poojithairosha.query_guard_spring_boot_starter.logging.QueryGuardLogger;
+import io.poojithairosha.query_guard_spring_boot_starter.model.QueryExecution;
+import io.poojithairosha.query_guard_spring_boot_starter.model.RequestTrace;
 import io.poojithairosha.query_guard_spring_boot_starter.report.QueryGuardReport;
 import io.poojithairosha.query_guard_spring_boot_starter.report.QueryGuardReportBuilder;
+import io.poojithairosha.query_guard_spring_boot_starter.storage.TraceStorage;
 import io.poojithairosha.query_guard_spring_boot_starter.trace.TraceContext;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,8 +29,24 @@ public class QueryGuardExecutor {
     private final QueryGuardReportBuilder reportBuilder;
     private final QueryGuardLogger logger;
     private final QueryGuardProperties properties;
+    private final TraceStorage traceStorage;
+
+    private boolean shouldSkip(HttpServletRequest request) {
+        String path = request.getRequestURI();
+
+        List<String> excludePaths = properties.getTracing().getExcludePaths();
+        excludePaths.add("/queryguard/**");
+
+        return properties.getTracing().getExcludePaths().stream()
+                .anyMatch(pattern -> path.startsWith(pattern.replace("/**", "")));
+    }
 
     public void execute(HttpServletRequest request, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
+        if (shouldSkip(request)) {
+            chain.doFilter(request, servletResponse);
+            return;
+        }
+
         boolean traceCreated = false;
         String traceId = MDC.get("traceId");
 
@@ -40,16 +59,39 @@ public class QueryGuardExecutor {
 
         try {
             QueryContextHolder.init();
+
+            QueryContext context = QueryContextHolder.get();
+            context.setStartTime(System.currentTimeMillis());
+            context.setEndpoint(request.getRequestURI());
+            context.setMethod(request.getMethod());
+
             chain.doFilter(request, servletResponse);
         } finally {
-
             long time = System.currentTimeMillis() - start;
             QueryContext context = QueryContextHolder.get();
 
-            if (context != null && properties.getLogging().isEnabled()) {
+            if (context != null) {
+                RequestTrace trace = RequestTrace.builder()
+                        .traceId(traceId)
+                        .endpoint(context.getEndpoint())
+                        .method(context.getMethod())
+                        .startTime(context.getStartTime())
+                        .build();
+
+                for (QueryExecution q : context.getQueries()) {
+                    trace.addQuery(q);
+                }
 
                 List<AnalysisResult> analyzed = engine.analyze(context);
                 List<AnalysisResult> processed = QueryResultProcessor.process(analyzed);
+
+                trace.setTotalExecutionTimeMs(System.currentTimeMillis() - context.getStartTime());
+                trace.setNPlusOneDetected(!analyzed.isEmpty());
+                trace.setIssues(
+                        analyzed.stream()
+                                .map(AnalysisResult::getMessage)
+                                .toList()
+                );
 
                 QueryGuardReport report = reportBuilder.build(
                         request,
@@ -59,7 +101,10 @@ public class QueryGuardExecutor {
                         traceId
                 );
 
-                logger.log(report);
+                traceStorage.save(trace);
+                if(properties.getLogging().isEnabled()) {
+                    logger.log(report);
+                }
             }
 
             TraceContext.clear(traceCreated);

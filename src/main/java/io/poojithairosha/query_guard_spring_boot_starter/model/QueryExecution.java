@@ -7,5 +7,7 @@ import lombok.Data;
 @Data
 public class QueryExecution {
     private final String sql;
-    private final long executionTimeMs;
+    private final double executionTimeMs;
+    private final long startTimeNs;
+    private final long endTimeNs;
 }
