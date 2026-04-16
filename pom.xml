@@ -12,7 +12,7 @@
 
 	<groupId>io.github.poojithairosha</groupId>
 	<artifactId>query-guard-spring-boot-starter</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>Query Guard Spring Boot Starter</name>
@@ -48,7 +48,9 @@
 	</scm>
 
 	<properties>
-		<java.version>21</java.version>
+		<java.version>17</java.version>
+		<maven.compiler.release>17</maven.compiler.release>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
@@ -134,7 +136,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>3.7.0</version>
 				<configuration>
-					<source>${java.version}</source>
+					<source>${maven.compiler.release}</source>
 				</configuration>
 				<executions>
 					<execution>
