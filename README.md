@@ -48,9 +48,9 @@ The processed results are converted into a `QueryGuardReport`, saved to in-memor
 
 ```xml
 <dependency>
-    <groupId>io.poojithairosha</groupId>
+    <groupId>io.github.poojithairosha</groupId>
     <artifactId>query-guard-spring-boot-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
