@@ -279,4 +279,4 @@ io.poojithairosha.query_guard_spring_boot_starter.config.QueryGuardAutoConfigura
 
 ## License
 
-Apache License 2.0.
+![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
