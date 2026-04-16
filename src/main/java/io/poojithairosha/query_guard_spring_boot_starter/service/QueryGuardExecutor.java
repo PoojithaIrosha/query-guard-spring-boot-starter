@@ -36,6 +36,7 @@ public class QueryGuardExecutor {
 
         List<String> excludePaths = properties.getTracing().getExcludePaths();
         excludePaths.add("/queryguard/**");
+        excludePaths.add("/queryguard-ui/**");
 
         return properties.getTracing().getExcludePaths().stream()
                 .anyMatch(pattern -> path.startsWith(pattern.replace("/**", "")));

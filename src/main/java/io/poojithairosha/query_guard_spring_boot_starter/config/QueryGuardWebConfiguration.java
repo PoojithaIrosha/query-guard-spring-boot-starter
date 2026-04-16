@@ -1,6 +1,7 @@
 package io.poojithairosha.query_guard_spring_boot_starter.config;
 
 import io.poojithairosha.query_guard_spring_boot_starter.controller.QueryGuardController;
+import io.poojithairosha.query_guard_spring_boot_starter.controller.QueryGuardUiController;
 import io.poojithairosha.query_guard_spring_boot_starter.filter.QueryGuardFilter;
 import io.poojithairosha.query_guard_spring_boot_starter.service.QueryGuardExecutor;
 import io.poojithairosha.query_guard_spring_boot_starter.storage.InMemoryTraceStorage;
@@ -62,6 +63,17 @@ public class QueryGuardWebConfiguration {
     )
     public QueryGuardController queryGuardController(TraceStorage storage) {
         return new QueryGuardController(storage);
+    }
+
+
+    @Bean
+    @ConditionalOnProperty(
+            name = "queryguard.enabled",
+            havingValue = "true",
+            matchIfMissing = true
+    )
+    public QueryGuardUiController queryGuardUiController() {
+        return new QueryGuardUiController();
     }
 
 }
