@@ -18,7 +18,7 @@ Query Guard wraps the application `DataSource`, records executed SQL statements 
 - Micrometer counter integration when a `MeterRegistry` bean is available.
 - In-memory request trace storage with a default capacity of 1000 traces.
 - REST API for reading stored request traces.
-- Bundled web UI served from `/queryguard-ui`.
+- Built-in dashboard and query explorer served from `/queryguard-ui`.
 - Configurable enablement, analyzer toggles, logging toggle, and path exclusions.
 - Request query-count threshold property is present, but threshold-based warning behavior is not currently implemented.
 - AOP annotations, custom application annotations, transaction interceptors, and Hibernate-specific listeners are not currently implemented.
@@ -66,7 +66,7 @@ For local development:
 2. Configure Query Guard. At minimum, define `queryguard.tracing.exclude-paths`; the current implementation expects this list to be non-null.
 3. Run the application.
 4. Execute HTTP requests that hit database-backed endpoints.
-5. Check application logs, `/queryguard/api/requests`, or `/queryguard-ui`
+5. Check application logs, `/queryguard/api/requests`, or the built-in dashboard and query explorer at `/queryguard-ui`.
 
 Expected startup behavior:
 
@@ -183,7 +183,15 @@ Then scrape:
 
 The bundled UI includes a live dashboard that reads Prometheus text output from `/actuator/prometheus`. Historical time ranges in the UI are built from repeated client-side polling, not from Prometheus range queries.
 
-## API & UI
+## Dashboard, Query Explorer & API
+
+Query Guard comes with a built-in dashboard and query explorer served from:
+
+```text
+/queryguard-ui
+```
+
+The dashboard uses stored request traces and Query Guard metrics to inspect recent requests, N+1 detections, duplicate SQL patterns, query timings, and per-trace query details.
 
 Query Guard exposes the following endpoints when enabled:
 
@@ -191,9 +199,9 @@ Query Guard exposes the following endpoints when enabled:
 | --- | --- |
 | `GET /queryguard/api/requests` | Returns all request traces currently stored in memory. |
 | `GET /queryguard/api/requests/{traceId}` | Returns one request trace by trace ID, or throws an exception when not found. |
-| `GET /queryguard-ui` | Serves the bundled UI. |
-| `GET /queryguard-ui/dashboard` | Serves the bundled UI dashboard route. |
-| `GET /queryguard-ui/trace/{traceId}` | Serves the bundled UI trace detail route. |
+| `GET /queryguard-ui` | Serves the built-in dashboard and query explorer. |
+| `GET /queryguard-ui/dashboard` | Serves the dashboard route. |
+| `GET /queryguard-ui/trace/{traceId}` | Serves the query explorer trace detail route. |
 
 Request traces are stored in `InMemoryTraceStorage` by default. The store keeps up to 1000 traces and evicts the eldest entry when the limit is exceeded.
 
