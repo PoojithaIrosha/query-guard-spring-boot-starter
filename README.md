@@ -261,7 +261,7 @@ src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoCo
 which imports:
 
 ```text
-io.poojithairosha.query_guard_spring_boot_starter.config.QueryGuardAutoConfiguration
+config.io.github.poojithairosha.query_guard_spring_boot_starter.QueryGuardAutoConfiguration
 ```
 
 ## Contributing
