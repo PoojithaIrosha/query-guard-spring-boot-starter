@@ -3,6 +3,7 @@ package io.github.poojithairosha.query_guard_spring_boot_starter.config;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ConfigurationProperties(prefix = "queryguard")
@@ -34,6 +35,6 @@ public class QueryGuardProperties {
 
     @Data
     public static class Tracing {
-        private List<String> excludePaths;
+        private List<String> excludePaths = new ArrayList<>();
     }
 }

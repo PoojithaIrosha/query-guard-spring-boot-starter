@@ -12,7 +12,7 @@
 
 	<groupId>io.github.poojithairosha</groupId>
 	<artifactId>query-guard-spring-boot-starter</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<packaging>jar</packaging>
 
 	<name>Query Guard Spring Boot Starter</name>
@@ -87,6 +87,11 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
 			<optional>true</optional>
 		</dependency>
 
