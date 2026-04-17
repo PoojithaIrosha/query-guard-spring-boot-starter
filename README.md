@@ -8,7 +8,7 @@ Query Guard wraps the application `DataSource`, records executed SQL statements 
 
 ## Features
 
-- Spring Boot 4 auto-configuration through `AutoConfiguration.imports`.
+- Spring Boot auto-configuration through `AutoConfiguration.imports`.
 - JDBC query tracking through a primary `DataSource` wrapper.
 - Per-request query collection using a servlet `Filter` and `ThreadLocal` request context.
 - Duplicate query detection based on normalized SQL text.
@@ -42,15 +42,32 @@ After the request completes, `QueryGuardExecutor` runs the configured analyzers:
 
 The processed results are converted into a `QueryGuardReport`, saved to in-memory trace storage, logged as JSON, and published as a `QueryGuardEvent`. If Micrometer is available, the event listener updates Query Guard counters.
 
+## Compatibility
+
+| Query Guard Version | Supported Spring Boot |
+|---------------------|----------------------|
+| 1.x.x               | 3.x                  |
+| 2.x.x               | 4.x                  |
+
 ## Installation
 
 ### Maven
 
+Use the dependency that matches your application:
+
 ```xml
+<!-- Spring Boot 3.x -->
 <dependency>
     <groupId>io.github.poojithairosha</groupId>
     <artifactId>query-guard-spring-boot-starter</artifactId>
     <version>1.0.0</version>
+</dependency>
+
+<!-- Spring Boot 4.x -->
+<dependency>
+    <groupId>io.github.poojithairosha</groupId>
+    <artifactId>query-guard-spring-boot-starter</artifactId>
+    <version>2.0.0</version>
 </dependency>
 ```
 
