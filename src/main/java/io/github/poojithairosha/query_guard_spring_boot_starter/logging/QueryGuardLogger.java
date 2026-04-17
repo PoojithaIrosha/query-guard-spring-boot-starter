@@ -1,6 +1,5 @@
 package io.github.poojithairosha.query_guard_spring_boot_starter.logging;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.poojithairosha.query_guard_spring_boot_starter.event.QueryGuardEvent;
 import io.github.poojithairosha.query_guard_spring_boot_starter.report.QueryGuardIssue;
 import io.github.poojithairosha.query_guard_spring_boot_starter.report.QueryGuardReport;
@@ -8,17 +7,18 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
+import tools.jackson.databind.json.JsonMapper;
 
 @RequiredArgsConstructor
 public class QueryGuardLogger {
     private static final Logger log = LoggerFactory.getLogger("QUERY_GUARD");
-    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final JsonMapper jsonMapper;
 
     public void log(QueryGuardReport report) {
         try {
-            String json = objectMapper.writeValueAsString(report);
+            String json = jsonMapper.writeValueAsString(report);
             log.info(json);
 
             int totalNPlusOne = report.getIssues().stream()

@@ -8,7 +8,7 @@ Query Guard wraps the application `DataSource`, records executed SQL statements 
 
 ## Features
 
-- Spring Boot 3 auto-configuration through `AutoConfiguration.imports`.
+- Spring Boot 4 auto-configuration through `AutoConfiguration.imports`.
 - JDBC query tracking through a primary `DataSource` wrapper.
 - Per-request query collection using a servlet `Filter` and `ThreadLocal` request context.
 - Duplicate query detection based on normalized SQL text.
@@ -27,7 +27,7 @@ Query Guard wraps the application `DataSource`, records executed SQL statements 
 
 Query Guard is enabled by default when the starter is on the classpath.
 
-At startup, `QueryGuardAutoConfiguration` imports the library configuration classes. When `queryguard.enabled=true`, Query Guard registers a `@Primary` `DataSource` bean that delegates to the original `DataSource`. Connections, statements, and prepared statements returned from that data source are wrapped by Query Guard proxy classes.
+At startup, `QueryGuardAutoConfiguration` imports the library configuration classes. When `queryguard.enabled=true`, Query Guard wraps existing `DataSource` beans with a proxy that delegates to the original `DataSource`. Connections, statements, and prepared statements returned from that data source are wrapped by Query Guard proxy classes.
 
 For each servlet request, `QueryGuardFilter` initializes a `QueryContext` in a `ThreadLocal`. When application code executes JDBC statements or prepared statements through the wrapped `DataSource`, Query Guard records:
 
