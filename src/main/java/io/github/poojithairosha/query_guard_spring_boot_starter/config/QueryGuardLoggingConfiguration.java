@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tools.jackson.databind.json.JsonMapper;
 
 @Configuration
 public class QueryGuardLoggingConfiguration {
@@ -18,8 +19,11 @@ public class QueryGuardLoggingConfiguration {
             havingValue = "true",
             matchIfMissing = true
     )
-    public QueryGuardLogger queryGuardLogger(ApplicationEventPublisher applicationEventPublisher) {
-        return new QueryGuardLogger(applicationEventPublisher);
+    public QueryGuardLogger queryGuardLogger(
+            ApplicationEventPublisher applicationEventPublisher,
+            JsonMapper jsonMapper
+            ) {
+        return new QueryGuardLogger(applicationEventPublisher, jsonMapper);
     }
 
     @Bean

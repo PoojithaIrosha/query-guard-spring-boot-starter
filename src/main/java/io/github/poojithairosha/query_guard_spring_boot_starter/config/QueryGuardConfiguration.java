@@ -9,11 +9,11 @@ import io.github.poojithairosha.query_guard_spring_boot_starter.report.QueryGuar
 import io.github.poojithairosha.query_guard_spring_boot_starter.service.QueryGuardExecutor;
 import io.github.poojithairosha.query_guard_spring_boot_starter.storage.TraceStorage;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -23,26 +23,29 @@ import java.util.List;
 public class QueryGuardConfiguration {
 
     @Bean
-    @Primary
     @ConditionalOnProperty(
             name = "queryguard.enabled",
             havingValue = "true",
             matchIfMissing = true
     )
-    public DataSource queryGuardDataSource(ObjectProvider<DataSource> dataSourceProvider) {
-        DataSource originalDataSource = dataSourceProvider.getIfAvailable();
-        if (originalDataSource == null) {
-            return null;
-        }
+    public static BeanPostProcessor queryGuardDataSourcePostProcessor() {
+        return new BeanPostProcessor() {
+            @Override
+            public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+                if (!(bean instanceof DataSource dataSource) || bean instanceof QueryGuardDataSource) {
+                    return bean;
+                }
 
-        log.info("QueryGuard DataSource Initialized");
-        return new QueryGuardDataSource(
-                originalDataSource,
-                List.of(
-                        new LoggingQueryListener(),
-                        new TrackingQueryListener()
-                )
-        );
+                log.info("QueryGuard DataSource Initialized for bean '{}'", beanName);
+                return new QueryGuardDataSource(
+                        dataSource,
+                        List.of(
+                                new LoggingQueryListener(),
+                                new TrackingQueryListener()
+                        )
+                );
+            }
+        };
     }
 
 
@@ -63,4 +66,3 @@ public class QueryGuardConfiguration {
     }
 
 }
-
