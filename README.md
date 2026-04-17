@@ -60,14 +60,14 @@ Use the dependency that matches your application:
 <dependency>
     <groupId>io.github.poojithairosha</groupId>
     <artifactId>query-guard-spring-boot-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.x.x</version>
 </dependency>
 
 <!-- Spring Boot 4.x -->
 <dependency>
     <groupId>io.github.poojithairosha</groupId>
     <artifactId>query-guard-spring-boot-starter</artifactId>
-    <version>2.0.0</version>
+    <version>2.x.x</version>
 </dependency>
 ```
 
