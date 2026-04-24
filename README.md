@@ -46,6 +46,7 @@ The processed results are converted into a `QueryGuardReport`, saved to in-memor
 
 | Query Guard Version | Supported Spring Boot |
 |---------------------|----------------------|
+| 1.x.x-sb2           | 2.x                  |
 | 1.x.x               | 3.x                  |
 | 2.x.x               | 4.x                  |
 
@@ -56,6 +57,13 @@ The processed results are converted into a `QueryGuardReport`, saved to in-memor
 Use the dependency that matches your application:
 
 ```xml
+<!-- Spring Boot 2.x -->
+<dependency>
+    <groupId>io.github.poojithairosha</groupId>
+    <artifactId>query-guard-spring-boot-starter</artifactId>
+    <version>1.x.x-sb2</version>
+</dependency>
+
 <!-- Spring Boot 3.x -->
 <dependency>
     <groupId>io.github.poojithairosha</groupId>
