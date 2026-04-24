@@ -4,6 +4,7 @@ import io.github.poojithairosha.query_guard_spring_boot_starter.context.QueryCon
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class QueryAnalysisEngine {
@@ -13,6 +14,6 @@ public class QueryAnalysisEngine {
     public List<AnalysisResult> analyze(QueryContext context) {
         return analyzers.stream()
                 .flatMap(a -> a.analyze(context).stream())
-                .toList();
+                .collect(Collectors.toList());
     }
 }

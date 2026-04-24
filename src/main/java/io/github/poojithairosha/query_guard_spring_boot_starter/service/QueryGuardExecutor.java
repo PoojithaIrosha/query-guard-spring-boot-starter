@@ -13,15 +13,16 @@ import io.github.poojithairosha.query_guard_spring_boot_starter.report.QueryGuar
 import io.github.poojithairosha.query_guard_spring_boot_starter.report.QueryGuardReportBuilder;
 import io.github.poojithairosha.query_guard_spring_boot_starter.storage.TraceStorage;
 import io.github.poojithairosha.query_guard_spring_boot_starter.trace.TraceContext;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.MDC;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class QueryGuardExecutor {
@@ -91,7 +92,7 @@ public class QueryGuardExecutor {
                 trace.setIssues(
                         analyzed.stream()
                                 .map(AnalysisResult::getMessage)
-                                .toList()
+                                .collect(Collectors.toList())
                 );
 
                 QueryGuardReport report = reportBuilder.build(

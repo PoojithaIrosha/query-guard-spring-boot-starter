@@ -1,11 +1,11 @@
 package io.github.poojithairosha.query_guard_spring_boot_starter.filter;
 
 import io.github.poojithairosha.query_guard_spring_boot_starter.service.QueryGuardExecutor;
-import jakarta.servlet.*;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Slf4j

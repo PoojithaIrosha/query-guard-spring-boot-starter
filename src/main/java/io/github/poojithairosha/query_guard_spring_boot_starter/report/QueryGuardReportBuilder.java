@@ -2,9 +2,10 @@ package io.github.poojithairosha.query_guard_spring_boot_starter.report;
 
 import io.github.poojithairosha.query_guard_spring_boot_starter.analysis.AnalysisResult;
 import io.github.poojithairosha.query_guard_spring_boot_starter.analysis.Severity;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class QueryGuardReportBuilder {
 
@@ -25,7 +26,7 @@ public class QueryGuardReportBuilder {
                         r.getSuggestions(),
                         r.getOccurrenceCount()
                 ))
-                .toList();
+                .collect(Collectors.toList());
 
         boolean hasNPlusOne = results.stream()
                 .anyMatch(r -> "N_PLUS_ONE".equals(r.getType()));
